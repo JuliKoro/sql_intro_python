@@ -3,7 +3,7 @@ SQL Introducción [Python]
 Ejercicio de profundización
 ---------------------------
 Autor: Julián Andrés Koroluk
-Version: 0.1
+Version: 1.0
 
 Descripcion:
 Solución del ejercicio del enunciado descripto en el archivo de
@@ -12,7 +12,7 @@ Solución del ejercicio del enunciado descripto en el archivo de
 
 __author__ = "Julián Andrés Koroluk"
 __email__ = "julian.koroluk@outlook.com"
-__version__ = "0.1"
+__version__ = "1.0"
 
 import sqlite3
 import matplotlib.pyplot as plt
@@ -79,11 +79,54 @@ def estadistica(data):
     print(f'Valor promedio: {promedio} ppm\n',
         f'Valor mínimo: {min} ppm\n',
         f'Valor máximo: {max} ppm\n',
-        f'Desvío estandar: {desvio} pp,\n')
+        f'Desvío estandar: {desvio} ppm\n')
 
 
 def regiones(data):
-    pass
+    '''Categorizar Ritmos Cardíacos
+
+    Separa los datos de ritmos cardíacos en tres categorías (aburrido, tranquilo y entusiasmado)
+    segun el nivel de intesnsidad con respecto al ritmo cardíaco promedio con el desvío.
+    Luego realiza un gráfico de disperción de las tres categorías.
+
+    @param List data Rítmos cardíacos
+    '''
+
+    prom = np.mean(data)
+    desvio = np.std(data)
+
+    x1 = [] # Estado aburrido
+    y1 = []
+    x2 = [] # Estado entusiasmado
+    y2 = []
+    x3 = [] # Estado tranquilo
+    y3 = []
+    for i in range(len(data)):
+        if data[i] <= (prom-desvio): # Estado aburrido
+            x1.append(i)
+            y1.append(data[i])
+        elif data[i] >= (prom-desvio): # Estado entusiasmado
+            x2.append(i)
+            y2.append(data[i])
+        else: # Estado tranquilo
+            x3.append(i)
+            y3.append(data[i])
+
+    fig = plt.figure(facecolor='whitesmoke')
+    fig.suptitle('Estados de la persona', fontsize=16)
+    ax = fig.add_subplot()
+    ax.scatter(x1, y1, c='blueviolet', alpha=0.2, label='aburrido')
+    ax.scatter(x2, y2, c='tomato', alpha=0.2, label='entusiasmado')
+    ax.scatter(x3, y3, c='turquoise', alpha=0.2,  label='tranquilo')
+    ax.axhline(prom, c='black', label='promedio')
+    ax.axhline((prom+desvio), c='darkgrey', linestyle='--', label='desvío')
+    ax.axhline((prom-desvio), c='darkgrey', linestyle='--')
+
+    ax.set_ylabel('pulsaciones por minuto [ppm]', c='black', fontweight='bold')
+    ax.legend()
+
+    print('Gráfico distintos estados cardíacos:')
+    plt.show()
 
 
 if __name__ == "__main__":
