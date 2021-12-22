@@ -37,16 +37,49 @@ def fetch():
     # Se lee la columna 'pulso' de la tabla 'sensor'
     c.execute("SELECT pulso FROM sensor")
     data = c.fetchall()
-    
+
+    print('¡Consulta a la DB con éxito!')
+
     return data
 
 
 def show(data):
-    pass
+    '''Visualización de datos
+
+    Realiza un gráfico de línea en base a la evolución del rítmo cardíaco.
+
+    @param List data Rítmos cardíacos
+    '''
+    
+    y = list(range(len(data)))
+
+    fig = plt.figure(facecolor='whitesmoke')
+    fig.suptitle('Evolución del ritmo cardíaco', fontsize=16)
+    ax = fig.add_subplot()
+    ax.plot(y, data, color='darkred', label='Rítmo cardíaco')
+    ax.set_ylabel('[ppm]', c='black', fontweight='bold')
+    ax.legend()
+
+    print('Gráfico de la Evolución Cardíaca:')
+    plt.show()
 
 
 def estadistica(data):
-    pass
+    '''Estadísticas de datos
+
+    Calcula distinos valores estadísticos y los muestra.
+
+    @param List data Rítmos cardíacos
+    '''
+    print('Estadísticas de la medición:\n')
+    promedio = np.mean(data)
+    min = np.min(data)
+    max = np.max(data)
+    desvio = np.std(data)
+    print(f'Valor promedio: {promedio} ppm\n',
+        f'Valor mínimo: {min} ppm\n',
+        f'Valor máximo: {max} ppm\n',
+        f'Desvío estandar: {desvio} pp,\n')
 
 
 def regiones(data):
@@ -54,10 +87,12 @@ def regiones(data):
 
 
 if __name__ == "__main__":
-  # Leer la DB
-  data = fetch()
+    print('Bienvenidos!\nEste programa realiza un analicis de datos sobre el ritmo cardíaco de una persona mirando un partido de fútbol.\n')    
 
-  # Data analytics
-  show(data)
-  estadistica(data)
-  regiones(data)
+    # Leer la DB
+    data = fetch()
+
+    # Data analytics
+    show(data)
+    estadistica(data)
+    regiones(data)
